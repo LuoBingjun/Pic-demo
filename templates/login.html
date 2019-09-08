@@ -1,0 +1,19 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+
+{% block title %}登录{% endblock %}
+
+{% block content %}
+<form action="/login/?{{ query_param }}" method="post" class="form">
+  {% csrf_token %}
+  {% bootstrap_form form %}
+  <button type="submit" class="btn btn-primary">
+    登录
+  </button>
+  <button type="reset" class="btn btn-outline-primary">
+    清空
+  </button>
+</form>
+{% endblock %}
+
+{# Read the documentation for more information #}

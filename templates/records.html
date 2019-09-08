@@ -1,0 +1,63 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+
+{% block title %}我的操作记录{% endblock %}
+
+{% block content %}
+<form action="/records/" method="get" class="form">
+    <div class="form-row align-items-center">
+        <div class="col-auto my-1">
+            起始时间: <input type="datetime-local" name="start" value="{{ start }}" />
+        </div>
+        <div class="col-auto my-1">
+            结束时间: <input type="datetime-local" name="end" value="{{ end }}" />
+        </div>
+        <div class="col-auto my-1">
+            <button type="submit" class="btn btn-primary">查询</button>
+        </div>
+    </div>
+</form>
+
+{% if object_list %}
+<form action="/records/delete/" method="post" class="form">
+    {% csrf_token %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th scope="col">ID</th>
+                <th scope="col">时间</th>
+                <th scope="col">文件名</th>
+                <th scope="col">原图片</th>
+                <th scope="col">处理结果</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for record in object_list %}
+            <tr>
+                <th scope="row">
+                    <input class="form-check-input" type="checkbox" name="id" value="{{ record.id }}"
+                        id="check_{{ record.id }}" />
+                    <label class="form-check-label" for="check_{{ record.id }}">{{ record.id }}</label>
+                </th>
+                <td>{{ record.time  | date:"Y年m月d日 H:i:s"  }}</td>
+                <td>{{ record.filename }}</td>
+                <td><img class="fit-picture" width="240px" src="{{ record.file.url }}" /></td>
+                <td>{{ record.result }}</td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+    <button type="submit" class="btn btn-danger">删除</button>
+    <button type="button" class="btn btn-primary"
+        onclick="window.location.href='./?{{ query_param }}page={{ page_obj.number|add:"-1" }}'"
+        {% if page_obj.number == 1 %} disabled {% endif %}>上一页</button>
+    <span>第{{ page_obj.number }}/{{ paginator.num_pages }}页</span>
+    <button type="button" class="btn btn-primary"
+        onclick="window.location.href='./?{{ query_param }}page={{ page_obj.number|add:"1" }}'"
+        {% if page_obj.number == paginator.num_pages %} disabled {% endif %}>下一页</button>
+</form>
+{% else %}
+所查询的记录为空
+{% endif %}
+
+{% endblock %}

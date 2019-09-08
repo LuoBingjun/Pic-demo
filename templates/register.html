@@ -1,0 +1,18 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+
+{% block title %}注册{% endblock %}
+
+{% block content %}
+<form action="/register/" method="post" class="form">
+    {% csrf_token %}
+    {% bootstrap_form form %}
+    {% buttons %}
+    <button type="submit" class="btn btn-primary">
+      注册
+    </button>
+    {% endbuttons %}
+  </form>
+{% endblock %}
+
+{# Read the documentation for more information #}

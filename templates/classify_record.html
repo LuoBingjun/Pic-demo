@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% load bootstrap4 %}
+
+{% block title %}图像分类结果{% endblock %}
+
+{% block content %}
+{% if request.user == object.user %}
+    <h1>{{ object.filename }}:</h1>
+    <p><img class="fit-picture" width="100%" src="{{ object.file.url }}" /><p>
+    <p>识别结果：{{ object.result }}</p>
+{% else %}
+    <p>您没有访问权限</p>
+{% endif %}
+{% endblock %}
+
+{# Read the documentation for more information #}
