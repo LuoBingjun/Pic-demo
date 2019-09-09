@@ -128,6 +128,8 @@ class ClassifyView(LoginRequiredMixin, TemplateView):
             return redirect('/classify/?fail')
         return redirect('/classify/record/%d' % (pk))
 
+def complete_process(id, res):
+    return True
 
 class ClassifyRecordView(LoginRequiredMixin, DetailView):
     template_name = "classify_record.html"
