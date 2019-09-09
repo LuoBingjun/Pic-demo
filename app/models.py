@@ -14,8 +14,8 @@ class Record(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE, db_index = True)
     file = models.FileField(upload_to = file_path)
     filename = models.CharField(max_length=256)
-    result = models.CharField(max_length=128)
     time = models.DateTimeField(auto_now=True)
+    classify = models.CharField(max_length=128, blank=True)
 
 @receiver(pre_delete)
 def callback(sender, **kwargs):

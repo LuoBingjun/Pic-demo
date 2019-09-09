@@ -47,7 +47,7 @@
                 <td>{{ record.time  | date:"Y年m月d日 H:i:s"  }}</td>
                 <td>{{ record.filename }}</td>
                 <td><img class="fit-picture" width="240px" src="{{ record.file.url }}" /></td>
-                <td>{{ record.result }}</td>
+                <td><a href="/process/record/{{ record.id }}">点击查看</a></td>
             </tr>
             {% endfor %}
         </tbody>

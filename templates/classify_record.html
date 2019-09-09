@@ -1,15 +1,67 @@
 {% extends 'base.html' %}
 {% load bootstrap4 %}
 
-{% block title %}图像分类结果{% endblock %}
+{% block title %}图像处理结果{% endblock %}
 
 {% block content %}
-{% if request.user == object.user %}
-    <h1>{{ object.filename }}:</h1>
-    <p><img class="fit-picture" width="100%" src="{{ object.file.url }}" /><p>
-    <p>识别结果：{{ object.result }}</p>
+{% if request.user == object.user or request.user.is_staff %}
+<ul class="list-group">
+    <li class="list-group-item">
+        <h5 class="mb-1">文件名</h5>
+        {{ object.filename }}
+    </li>
+    <li class="list-group-item">
+        <h5>原图片</h5>
+        <img class="fit-picture" height="480px" src="{{ object.file.url }}" />
+    </li>
+    <li class="list-group-item">
+        <h5>图像分类</h5>
+        <div id="classify">
+            加载中
+        </div>
+    </li>
+</ul>
+
+<script>
+    $.ajaxSetup({
+        data: { csrfmiddlewaretoken: '{{ csrf_token }}' },
+    });
+    function getClassify() {
+        let data = {
+            'field': 'classify'
+        };
+        console.log(data);
+        $.ajax({
+            type: 'POST',
+            url: '/process/record/{{ object.id }}',
+            data: data,
+            dataType: 'json',
+            success: function (d) {
+                console.log(d);
+                if (d.success) {
+                    if (d.data) {
+                        $('#classify').html('<div>' + d.data + '</div>');
+                    }
+                    else {
+                        $('#classify').html('<div>处理中...</div>');
+                        setTimeout(getClassify, 1000);
+                    }
+                } else {
+                    $('#classify').html('<div>' + d.message + '</div>');
+                }
+            },
+            error: function (d) {
+                $('#classify').html('<div>请求失败</div>');
+            }
+        });
+    }
+
+    $(document).ready(function () {
+        getClassify()
+    });
+</script>
 {% else %}
-    <p>您没有访问权限</p>
+<p>您没有访问权限</p>
 {% endif %}
 {% endblock %}
 
