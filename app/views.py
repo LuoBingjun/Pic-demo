@@ -16,6 +16,7 @@ import time
 
 from app.forms import *
 from app.models import Record
+from app.processors import process
 
 # Create your views here.
 
@@ -94,7 +95,7 @@ class RegisterView(FormView):
             return super().form_invalid(form)
 
 
-def handle_classfify(user, file=None, path=None):
+def add_record(user, file=None, path=None):
     if path:
         get = requests.get(path)
         if get.status_code == 200:
@@ -106,6 +107,7 @@ def handle_classfify(user, file=None, path=None):
 
     new_record = Record(user=user, file=file, filename=file.name)
     new_record.save()
+    process.process_classify(new_record.id, str(new_record.file))
     return new_record.pk
 
 
@@ -122,13 +124,14 @@ class ClassifyView(LoginRequiredMixin, TemplateView):
 
     def post(self, request):
         try:
-            pk = handle_classfify(user=request.user, file=request.FILES.get(
+            pk = add_record(user=request.user, file=request.FILES.get(
                 'file'), path=request.POST.get('file_path'))
+            
         except:
-            return redirect('/classify/?fail')
-        return redirect('/classify/record/%d' % (pk))
+            return redirect('/process/?fail')
+        return redirect('/process/record/%d' % (pk))
 
-def complete_process(id, res):
+def complete_process(id, res, type):
     return True
 
 class ClassifyRecordView(LoginRequiredMixin, DetailView):
