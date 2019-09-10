@@ -1,9 +1,9 @@
 import tensorflow as tf
 import numpy as np
 import os
-os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
+import face_recognition
 
-os.path.join()
+os.environ['TF_CPP_MIN_LOG_LEVEL'] = '3'
 
 with open('node2human.txt','r') as f:
     node_id_to_name = eval(f.read())
@@ -17,7 +17,7 @@ with tf.gfile.GFile('/Users/liuyunrui/PycharmProjects/tensor/model/classify_imag
 
 with tf.Session() as sess:
     softmax_tensor = sess.graph.get_tensor_by_name('softmax:0')
-    
+
     image_data = tf.gfile.GFile('/Users/liuyunrui/PycharmProjects/tensor/model/image/tiger.jpg', 'rb').read()
     predictions = sess.run(softmax_tensor,{'DecodeJpeg/contents:0': image_data})
     predictions = np.squeeze(predictions)
