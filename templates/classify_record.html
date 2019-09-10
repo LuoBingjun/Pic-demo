@@ -40,7 +40,18 @@
                 console.log(d);
                 if (d.success) {
                     if (d.data) {
-                        $('#classify').html('<div>' + d.data + '</div>');
+                        let res = JSON.parse(d.data);
+                        $('#classify').html(`<table class="table">
+                        <thead><tr><th scope="col">分类</th><th scope="col">得分</th></tr></thead>
+                        <tbody>
+                            ${res.map(item => `
+                                <tr>
+                                    <td>${item.class}</td>
+                                    <td>${item.score}</td>
+                                </tr>
+                                `).join('')}
+                        </tbody>
+                        </table>`);
                     }
                     else {
                         $('#classify').html('<div>处理中...</div>');

@@ -13,6 +13,7 @@ from django.core.files.uploadedfile import InMemoryUploadedFile
 import requests
 from io import BytesIO
 import time
+import json
 
 from app.forms import *
 from app.models import Record
@@ -130,9 +131,6 @@ class ClassifyView(LoginRequiredMixin, TemplateView):
         except:
             return redirect('/process/?fail')
         return redirect('/process/record/%d' % (pk))
-
-def complete_process(id, res, type):
-    return True
 
 class ClassifyRecordView(LoginRequiredMixin, DetailView):
     template_name = "classify_record.html"
