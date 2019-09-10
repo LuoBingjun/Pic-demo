@@ -1,5 +1,6 @@
 from concurrent.futures import ThreadPoolExecutor
 from app.processors.classifier.recog import classify
+from app.processors.face_recognition.test import face_recog
 from app.models import Record
 import json
 
@@ -16,3 +17,6 @@ def update(res):
 
 def process_classify(id, filename):
     pool.submit(classify, id, filename).add_done_callback(update)
+
+def process_facerecog(id, filename):
+    pool.submit(face_recog, id, filename).add_done_callback(update)
