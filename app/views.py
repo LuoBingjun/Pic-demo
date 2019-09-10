@@ -109,6 +109,7 @@ def add_record(user, file=None, path=None):
     new_record = Record(user=user, file=file, filename=file.name)
     new_record.save()
     process.process_classify(new_record.id, str(new_record.file))
+    process.process_facerecog(new_record.id, str(new_record.file))
     return new_record.pk
 
 
@@ -139,6 +140,7 @@ class ClassifyRecordView(LoginRequiredMixin, DetailView):
     def post(self, request, pk):
         value = {
             'classify': lambda x: x.classify,
+            'face': lambda x: x.face.url if x.face else '',
         }
         field = request.POST.get('field')
         try:

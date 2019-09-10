@@ -16,9 +16,13 @@ class Record(models.Model):
     filename = models.CharField(max_length=256)
     time = models.DateTimeField(auto_now=True)
     classify = models.CharField(max_length=128, blank=True)
+    face = models.FileField(upload_to = file_path, blank=True)
 
 @receiver(pre_delete)
 def callback(sender, **kwargs):
     if sender == Record:
-        path = kwargs['instance'].file.path
-        os.remove(path)
+        instance = kwargs['instance']
+        os.remove(instance.file.path)
+        if os.path.exists(instance.face.path):
+            os.remove(instance.face.path)
+        

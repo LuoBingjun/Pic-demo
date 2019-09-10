@@ -12,11 +12,17 @@
     </li>
     <li class="list-group-item">
         <h5>原图片</h5>
-        <img class="fit-picture" height="480px" src="{{ object.file.url }}" />
+        <img class="fit-picture" style="max-width:800px" src="{{ object.file.url }}" />
     </li>
     <li class="list-group-item">
         <h5>图像分类</h5>
         <div id="classify">
+            加载中
+        </div>
+    </li>
+    <li class="list-group-item">
+        <h5>人脸检测</h5>
+        <div id="face">
             加载中
         </div>
     </li>
@@ -67,8 +73,39 @@
         });
     }
 
+    function getFace() {
+        let data = {
+            'field': 'face'
+        };
+        console.log(data);
+        $.ajax({
+            type: 'POST',
+            url: '/process/record/{{ object.id }}',
+            data: data,
+            dataType: 'json',
+            success: function (d) {
+                console.log(d);
+                if (d.success) {
+                    if (d.data) {
+                        $('#face').html(`<img class="fit-picture" style="max-width:800px" src="${d.data}" />`);
+                    }
+                    else {
+                        $('#face').html('<div>处理中...</div>');
+                        setTimeout(getFace, 1000);
+                    }
+                } else {
+                    $('#face').html('<div>' + d.message + '</div>');
+                }
+            },
+            error: function (d) {
+                $('#face').html('<div>请求失败</div>');
+            }
+        });
+    }
+
     $(document).ready(function () {
         getClassify()
+        getFace()
     });
 </script>
 {% else %}
