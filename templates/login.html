@@ -14,6 +14,13 @@
     清空
   </button>
 </form>
+
+<script>
+  let form_group = document.getElementsByClassName('form-control');
+  for (let item of form_group) {
+    item.classList.remove('is-valid');
+  }
+</script>
 {% endblock %}
 
 {# Read the documentation for more information #}

@@ -5,14 +5,21 @@
 
 {% block content %}
 <form action="/register/" method="post" class="form">
-    {% csrf_token %}
-    {% bootstrap_form form %}
-    {% buttons %}
-    <button type="submit" class="btn btn-primary">
-      注册
-    </button>
-    {% endbuttons %}
-  </form>
+  {% csrf_token %}
+  {% bootstrap_form form %}
+  {% buttons %}
+  <button type="submit" class="btn btn-primary">
+    注册
+  </button>
+  {% endbuttons %}
+</form>
+
+<script>
+  let form_group = document.getElementsByClassName('form-control');
+  for (let item of form_group) {
+    item.classList.remove('is-valid');
+  }
+</script>
 {% endblock %}
 
 {# Read the documentation for more information #}
