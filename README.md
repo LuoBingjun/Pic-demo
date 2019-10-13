@@ -1,2 +1,2 @@
-# Pic_demo
+# Pic-demo
 Course project for Python backend.
